@@ -1,0 +1,77 @@
+### Config - get all
+GET http://localhost:3000/api/config/all
+
+### Config - get all bugs
+GET http://localhost:3000/api/config/bugs
+
+### Config - get all features
+GET http://localhost:3000/api/config/features
+
+### Config Reset
+GET http://localhost:3000/api/config/reset
+
+
+### Config - change token and cookies
+POST http://localhost:3000/api/config/all
+content-type: application/json
+ 
+{
+    "tokenExpirationInMinutes": 1,
+    "cookieMaxAge": 60000,
+    "tokenExpiresIn": "1m"
+}
+
+### Config - change bugs
+POST http://localhost:3000/api/config/bugs
+content-type: application/json
+ 
+{
+    "bug_charts_001": true,
+    "bug_charts_002": true
+}
+
+### Config - change features
+POST http://localhost:3000/api/config/features
+content-type: application/json
+ 
+{
+    "feature_only_backend": false,
+    "feature_likes": true,
+    "feature_files": true,
+    "feature_labels": true
+}
+
+### Config - check feature
+POST http://localhost:3000/api/config/checkfeatures
+content-type: application/json
+ 
+{
+    "feature": "feature_likes"
+}
+
+### Config - change log level
+POST http://localhost:3000/api/config/all
+content-type: application/json
+ 
+{
+    "currentLogLevel": 5
+}
+
+### Config - change publicLogsEnabled
+POST http://localhost:3000/api/config/all
+content-type: application/json
+ 
+{
+    "publicLogsEnabled": true
+}
+
+### Config - change maxRandomVisitsForArticles
+POST http://localhost:3000/api/config/all
+content-type: application/json
+ 
+{
+    "maxRandomVisitsForArticles": 150000
+}
+
+### Get logs
+GET http://localhost:3000/api/logs

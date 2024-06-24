@@ -1,0 +1,5311 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "🦎 GAD ",
+    "description": "This is a sample REST server form jaktestowac.pl team.</br></br>Return to <a target='_blank' href='../tools/index.html' rel='noopener noreferrer' class='link'><strong>TOOLS🔨</strong></a>",
+    "termsOfService": "http://jaktestowac.pl/",
+    "version": "1.3.3"
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    },
+    {
+      "url": "http://localhost:3000/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "authentication",
+      "description": "Authentication section - possibility to login as a user"
+    },
+    {
+      "name": "users",
+      "description": "Users"
+    },
+    {
+      "name": "articles",
+      "description": "Articles (blog entries) with lot of contents"
+    },
+    {
+      "name": "comments",
+      "description": "Comments"
+    },
+    {
+      "name": "random",
+      "description": "Random data"
+    },
+    {
+      "name": "likes",
+      "description": "Likes (⚠️ needs proper feature flag enabled)"
+    },
+    {
+      "name": "files",
+      "description": "Files (⚠️ needs proper feature flag enabled)"
+    },
+    {
+      "name": "labels",
+      "description": "Labels (⚠️ needs proper feature flag enabled)"
+    },
+    {
+      "name": "article-labels",
+      "description": "Article Labels (⚠️ needs proper feature flag enabled)"
+    },
+    {
+      "name": "bookmarks",
+      "description": "Bookmarks (⚠️ needs proper feature flag enabled)"
+    },
+    {
+      "name": "search",
+      "description": "Search, filter, pagination for given objects"
+    },
+    {
+      "name": "other",
+      "description": "Other operations"
+    },
+    {
+      "name": "quiz",
+      "description": "Quiz game about testing"
+    },
+    {
+      "name": "hangman",
+      "description": "Hangman game"
+    },
+    {
+      "name": "minesweeper",
+      "description": "Minesweeper game"
+    },
+    {
+      "name": "tic-tac-toe",
+      "description": "Tic Tac Toe game"
+    },
+    {
+      "name": "games",
+      "description": "Games"
+    },
+    {
+      "name": "scores",
+      "description": "Game scores"
+    },
+    {
+      "name": "surveys",
+      "description": "Surveys"
+    },
+    {
+      "name": "visits",
+      "description": "Visits of different entities"
+    },
+    {
+      "name": "calculators",
+      "description": "Calculators"
+    },
+    {
+      "name": "stats",
+      "description": "Statistics"
+    },
+    {
+      "name": "healthcheck",
+      "description": "Healthcheck - check status and health of 🦎GAD"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Login as user to receive token",
+        "operationId": "userLogin",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginData"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginToken"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/articles": {
+      "get": {
+        "tags": ["articles"],
+        "summary": "Get articles",
+        "operationId": "getArticles",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Articles"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["articles"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Add article",
+        "operationId": "postArticle",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleCreate"
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "201": {
+            "description": "Article created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid article supplied",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/articles/{id}": {
+      "get": {
+        "tags": ["articles"],
+        "summary": "Find article by ID",
+        "description": "Returns a single article",
+        "operationId": "getArticleById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of article to return",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Article not found",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["articles"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Updates an article",
+        "description": "Updates an article.",
+        "operationId": "putArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of article that need to be updated",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated article object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Article updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Article created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Article not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid article supplied",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": ["articles"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Updates an article",
+        "description": "Updates an article.",
+        "operationId": "patchArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of article that need to be updated",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated article object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Article updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Article"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Article not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid article supplied",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["articles"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Deletes an article",
+        "operationId": "deleteArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Article id to delete",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Article deleted",
+            "content": {}
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "head": {
+        "tags": ["articles"],
+        "summary": "Info about article",
+        "operationId": "headArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of article to return",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Article exists",
+            "content": {}
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {}
+          },
+          "404": {
+            "description": "Article not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["users"],
+        "summary": "Create user",
+        "operationId": "postUser",
+        "requestBody": {
+          "description": "Creats user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "409": {
+            "description": "Conflict - Invalid user email",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid user supplied",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Find user by ID",
+        "description": "Returns a single user",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of User to return",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid user id supplied",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Updates user",
+        "description": "Updates user.",
+        "operationId": "putUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of user that need to be updated",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid user supplied",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": ["users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Updates user",
+        "description": "Updates user.",
+        "operationId": "patchUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of user that need to be updated",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid user supplied",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Deletes a user",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id to delete",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      },
+      "head": {
+        "tags": ["users"],
+        "summary": "Info about user",
+        "operationId": "headUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user to return",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User exists",
+            "content": {}
+          },
+          "400": {
+            "description": "Invalid user ID",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/comments": {
+      "get": {
+        "tags": ["comments"],
+        "summary": "Get comments",
+        "operationId": "getComments",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comments"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create comment",
+        "operationId": "createComment",
+        "requestBody": {
+          "description": "Created Comment object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Comment created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid comment supplied",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/article-labels/articles/{id}": {
+      "get": {
+        "tags": ["article-labels"],
+        "summary": "Get labels for article",
+        "operationId": "getArticleLabels",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of article to return its labels",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleLabels"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["article-labels"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Creates, updates or deletes labels for article",
+        "description": "Creates, updates or deletes labels for article.",
+        "operationId": "putArticleLabels",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of article-labels entity that need to be updated",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated ArticleLabel object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticleLabelsUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "ArticleLabel updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleLabels"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "ArticleLabel created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleLabels"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "404": {
+            "description": "User not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid user supplied",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/labels": {
+      "get": {
+        "tags": ["labels"],
+        "summary": "Get labels",
+        "operationId": "getLabels",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Labels"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/likes": {
+      "post": {
+        "tags": ["likes"],
+        "summary": "Like or dislike element on page",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "operationId": "createLike",
+        "requestBody": {
+          "description": "Created Like object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Like"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Like deleted",
+            "content": {}
+          },
+          "201": {
+            "description": "Like created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Like"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid data supplied",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/likes/article/{id}": {
+      "get": {
+        "tags": ["likes"],
+        "summary": "Get likes for article",
+        "operationId": "getLikesForArticle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of article to return its likes",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Likes"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/likes/article": {
+      "get": {
+        "tags": ["likes"],
+        "summary": "Get likes for article",
+        "operationId": "getLikesForArticle",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Likes"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/likes/comment/{id}": {
+      "get": {
+        "tags": ["likes"],
+        "summary": "Get likes for comment",
+        "operationId": "getLikesForComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of comment to return its likes",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Likes"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/likes/article/mylikes": {
+      "get": {
+        "tags": ["likes"],
+        "summary": "Get myLikes",
+        "operationId": "getMyLikes",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID of article",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
+            "name": "userid",
+            "in": "header",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyLikes"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/files/uploaded": {
+      "get": {
+        "tags": ["files"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get files",
+        "operationId": "getFiles",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadedFiles"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/files/uploaded?userId={id}": {
+      "get": {
+        "tags": ["files"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get user files",
+        "operationId": "getUserFiles",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadedFiles"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/files/uploaded/public": {
+      "get": {
+        "tags": ["files"],
+        "summary": "Get files",
+        "operationId": "getPublicFiles",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadedFiles"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/files/uploaded/public?userIds={id}": {
+      "get": {
+        "tags": ["files"],
+        "summary": "Get users public files",
+        "operationId": "getUsersPublicFiles",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user or multiple IDs of users separated by comma",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadedFiles"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/comments/{id}": {
+      "get": {
+        "tags": ["comments"],
+        "summary": "Find comments by ID",
+        "description": "Returns a single comment",
+        "operationId": "getCommentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of comment to return",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid comment id supplied",
+            "content": {}
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["comments"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Updates comment",
+        "description": "Updates comment.",
+        "operationId": "putComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of comment that need to be updated",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated comment object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Comment created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid comment supplied",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["comments"],
+        "summary": "Updates comment",
+        "description": "Updates comment.",
+        "operationId": "patchComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id of comment that need to be updated",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated comment object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Comment updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - malformed JSON",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid comment supplied",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["comments"],
+        "summary": "Deletes a comment",
+        "operationId": "deleteComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Comment id to delete",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment deleted",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {}
+          }
+        }
+      },
+      "head": {
+        "tags": ["comments"],
+        "summary": "Info about comment",
+        "operationId": "headComment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of comment to return",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment exists",
+            "content": {}
+          },
+          "400": {
+            "description": "Invalid comment ID",
+            "content": {}
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/articles?": {
+      "get": {
+        "tags": ["search"],
+        "summary": "Get articles with query",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Free search articles."
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "required": false,
+            "description": "Id of article."
+          },
+          {
+            "in": "query",
+            "name": "user_id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "required": false,
+            "description": "Id of user, creator of article."
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Date of article creation."
+          },
+          {
+            "in": "query",
+            "name": "_sort",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Sort with given attribute (user_id, title, id), use it with _order."
+          },
+          {
+            "in": "query",
+            "name": "_order",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Order default ascending (asc) for descending use desc."
+          },
+          {
+            "in": "query",
+            "name": "_limit",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "allowEmptyValue": true,
+            "description": "Limit returned items. By default empty limit is 10."
+          },
+          {
+            "in": "query",
+            "name": "_page",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Page number when using _limit."
+          },
+          {
+            "in": "query",
+            "name": "_start",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "How many items should be skipped."
+          },
+          {
+            "in": "query",
+            "name": "_end",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "How many to show after _start."
+          },
+          {
+            "in": "query",
+            "name": "_embed",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Embed depending objects (comments)."
+          },
+          {
+            "in": "query",
+            "name": "_expand",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Expand depending objects (user)."
+          }
+        ],
+        "operationId": "getArticlesQuery",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Articles"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users?": {
+      "get": {
+        "tags": ["search"],
+        "summary": "Get users with query",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Free search users."
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "required": false,
+            "description": "Id of user."
+          },
+          {
+            "in": "query",
+            "name": "firstname",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "First name of user."
+          },
+          {
+            "in": "query",
+            "name": "lastname",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Last name of user."
+          },
+          {
+            "in": "query",
+            "name": "email",
+            "schema": {
+              "type": "string",
+              "format": "email"
+            },
+            "required": false,
+            "description": "User email."
+          },
+          {
+            "in": "query",
+            "name": "_sort",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Sort with given attribute (user_id, title, id), use it with _order."
+          },
+          {
+            "in": "query",
+            "name": "_order",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Order default ascending (asc) for descending use desc."
+          },
+          {
+            "in": "query",
+            "name": "_limit",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "allowEmptyValue": true,
+            "description": "Limit returned items. By default empty limit is 10."
+          },
+          {
+            "in": "query",
+            "name": "_page",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Page number when using _limit."
+          },
+          {
+            "in": "query",
+            "name": "_start",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "How many items should be skipped."
+          },
+          {
+            "in": "query",
+            "name": "_end",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "How many to show after _start."
+          },
+          {
+            "in": "query",
+            "name": "_embed",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Embed depending objects (articles, comments)."
+          }
+        ],
+        "operationId": "getUsersQuery",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Users"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comments?": {
+      "get": {
+        "tags": ["search"],
+        "summary": "Get comments with query",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Free search comments."
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "required": false,
+            "description": "Id of comment."
+          },
+          {
+            "in": "query",
+            "name": "user_id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "required": false,
+            "description": "Id of user."
+          },
+          {
+            "in": "query",
+            "name": "article_id",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "required": false,
+            "description": "Id fo article."
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Date of comment creation."
+          },
+          {
+            "in": "query",
+            "name": "_sort",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Sort with given attribute (user_id, title, id), use it with _order."
+          },
+          {
+            "in": "query",
+            "name": "_order",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Order default ascending (asc) for descending use desc."
+          },
+          {
+            "in": "query",
+            "name": "_limit",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "allowEmptyValue": true,
+            "description": "Limit returned items. By default empty limit is 10."
+          },
+          {
+            "in": "query",
+            "name": "_page",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Page number when using _limit."
+          },
+          {
+            "in": "query",
+            "name": "_start",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "How many items should be skipped."
+          },
+          {
+            "in": "query",
+            "name": "_end",
+            "schema": {
+              "type": "integer"
+            },
+            "required": false,
+            "description": "How many to show after _start."
+          },
+          {
+            "in": "query",
+            "name": "_expand",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Expand depending objects (user, article)."
+          }
+        ],
+        "operationId": "getCommentsQuery",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Comments"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/user": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Get user pictures",
+        "operationId": "getUserPictures",
+        "responses": {
+          "200": {
+            "description": "Images received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/images/posts": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Get articles pictures",
+        "operationId": "getArticlesPictures",
+        "responses": {
+          "200": {
+            "description": "Images received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/calc/simpleroi": {
+      "post": {
+        "tags": ["calculators"],
+        "summary": "Calculate simple ROI",
+        "operationId": "calcSimpleRoi",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimpleRoiParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Calculated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimpleRoiCalculations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calc/roi": {
+      "post": {
+        "tags": ["calculators"],
+        "summary": "Calculate advanced ROI",
+        "operationId": "calcAdvRoi",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoiParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Calculated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoiCalculations"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/languages": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Get languages",
+        "operationId": "getLanguages",
+        "responses": {
+          "200": {
+            "description": "Languages received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/languages/translations": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Get translations",
+        "operationId": "getTranslations",
+        "responses": {
+          "200": {
+            "description": "Translations received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/languages/translations/{lang}": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Get translations",
+        "operationId": "getTranslations",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "path",
+            "description": "Language",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Translations received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/restoreDB": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Restore DB",
+        "operationId": "restoreDB",
+        "responses": {
+          "201": {
+            "description": "Database with sample data restored",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/restoreEmptyDB": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Restore Empty DB",
+        "operationId": "restoreEmptyDB",
+        "responses": {
+          "201": {
+            "description": "Empty database restored",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/restoreBigDB": {
+      "get": {
+        "tags": ["other"],
+        "summary": "Restore Big DB",
+        "operationId": "restoreBigDB",
+        "responses": {
+          "201": {
+            "description": "Big database restored",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/users": {
+      "get": {
+        "tags": ["stats"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "chartType",
+            "schema": {
+              "type": "string",
+              "enum": ["table", "pie", "chart"]
+            },
+            "required": true,
+            "description": "Chart type"
+          }
+        ],
+        "summary": "Get user stats",
+        "operationId": "getUserstats",
+        "responses": {
+          "200": {
+            "description": "User stats received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/articles": {
+      "get": {
+        "tags": ["stats"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "chartType",
+            "schema": {
+              "type": "string",
+              "enum": ["table", "pie", "chart"]
+            },
+            "required": true,
+            "description": "Chart type"
+          }
+        ],
+        "summary": "Get article stats",
+        "operationId": "getArticleStats",
+        "responses": {
+          "200": {
+            "description": "Article stats received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/publications/articles": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get article publish stats",
+        "operationId": "getArticlePublishStats",
+        "responses": {
+          "200": {
+            "description": "Article publish stats received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/publications/comments": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get comments publish stats",
+        "operationId": "getCommentsPublishStats",
+        "responses": {
+          "200": {
+            "description": "Comments publish stats received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/activity/user": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get user activity stats",
+        "operationId": "getUserActivityStats",
+        "responses": {
+          "200": {
+            "description": "User activity stats received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityStats"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/activity/user/{id}": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get single user activity stats",
+        "operationId": "getSingleUserActivityStats",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single user activity stats received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivityStats"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/api": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get api calls",
+        "operationId": "getApiCalls",
+        "responses": {
+          "200": {
+            "description": "Calls received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/api/details": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get api detailed calls",
+        "operationId": "getApiDetailedCalls",
+        "responses": {
+          "200": {
+            "description": "Calls received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/nonapi": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get non api calls",
+        "operationId": "getNonApiCalls",
+        "responses": {
+          "200": {
+            "description": "Calls received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/stats/nonapi/details": {
+      "get": {
+        "tags": ["stats"],
+        "summary": "Get non api detailed calls",
+        "operationId": "getNonApiDetailedCalls",
+        "responses": {
+          "200": {
+            "description": "Calls received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/random/article": {
+      "get": {
+        "tags": ["random"],
+        "summary": "Get random article",
+        "operationId": "getRandomArticle",
+        "responses": {
+          "200": {
+            "description": "Article received",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/quiz/start": {
+      "get": {
+        "tags": ["quiz"],
+        "summary": "Start quiz",
+        "operationId": "startQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz started"
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {}
+        }
+      }
+    },
+    "/quiz/stop": {
+      "get": {
+        "tags": ["quiz"],
+        "summary": "Stop quiz",
+        "operationId": "stopQuiz",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz stopped",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizHighScore"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Quiz stopped with new high score",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizHighScore"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/quiz/highscores": {
+      "get": {
+        "tags": ["quiz"],
+        "summary": "Get quiz high scores",
+        "operationId": "getQuizhighscores",
+        "responses": {
+          "200": {
+            "description": "Quiz high scores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizHighScore"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/quiz/questions": {
+      "get": {
+        "tags": ["quiz"],
+        "summary": "Get quiz questions",
+        "operationId": "getQuizQuestions",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz questions received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizQuestions"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/quiz/questions/count": {
+      "get": {
+        "tags": ["quiz"],
+        "summary": "Get number of questions",
+        "operationId": "getQuestionCount",
+        "responses": {
+          "200": {
+            "description": "Number of questions received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizQuestionCount"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/quiz/questions/check": {
+      "post": {
+        "tags": ["quiz"],
+        "summary": "Check quiz answer for question",
+        "operationId": "checkQuizAnswer",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuizAnswer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Validation of quiz answer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizAnswerValidation"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/hangman/random": {
+      "get": {
+        "tags": ["hangman"],
+        "summary": "Get random word",
+        "operationId": "getRandomWord",
+        "responses": {
+          "200": {
+            "description": "Random word",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HangmanRandomWord"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hangman/highscores": {
+      "get": {
+        "tags": ["hangman"],
+        "summary": "Get hangman highscores",
+        "operationId": "getHangmanHighscores",
+        "responses": {
+          "200": {
+            "description": "hangman highscores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scores"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hangman/score": {
+      "post": {
+        "tags": ["hangman"],
+        "summary": "Set Hangman Score",
+        "operationId": "setHangmanScore",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Score recorded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScoreRecord"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid score data",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/minesweeper/highscores": {
+      "get": {
+        "tags": ["minesweeper"],
+        "summary": "Get minesweeper highscores",
+        "operationId": "getMinesweeperHighscores",
+        "responses": {
+          "200": {
+            "description": "minesweeper highscores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scores"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/minesweeper/score": {
+      "post": {
+        "tags": ["minesweeper"],
+        "summary": "Set minesweeper Score",
+        "operationId": "setMinesweeperScore",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Score recorded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScoreRecord"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid score data",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/tic-tac-toe/highscores": {
+      "get": {
+        "tags": ["tic-tac-toe"],
+        "summary": "Get tic-tac-toe highscores",
+        "operationId": "getTicTacToeHighscores",
+        "responses": {
+          "200": {
+            "description": "TicTacToe highscores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scores"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tic-tac-toe/start": {
+      "post": {
+        "tags": ["tic-tac-toe"],
+        "summary": "start TicTacToe",
+        "operationId": "startTicTacToe",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicTacToeSession"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/tic-tac-toe/join": {
+      "post": {
+        "tags": ["tic-tac-toe"],
+        "summary": "join TicTacToe session",
+        "operationId": "joinTicTacToeSession",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicTacToeJoin"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Joined",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicTacToeSession"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Session code not provided",
+            "content": {}
+          },
+          "409": {
+            "description": "Game already full",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid session code",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/tic-tac-toe/status/{code}": {
+      "get": {
+        "tags": ["tic-tac-toe"],
+        "summary": "Get tic-tac-toe status",
+        "operationId": "getTicTacToeStatus",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "description": "Session code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "TicTacToe status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicTacToeSession"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/tic-tac-toe/status": {
+      "post": {
+        "tags": ["tic-tac-toe"],
+        "summary": "make a move in TicTacToe",
+        "operationId": "moveTicTacToe",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveTicTacToe"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Stopped",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicTacToeSession"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Session code not provided",
+            "content": {}
+          },
+          "422": {
+            "description": "User cannot make a move",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/tic-tac-toe/stop": {
+      "post": {
+        "tags": ["tic-tac-toe"],
+        "summary": "stop TicTacToe session",
+        "operationId": "stopTicTacToeSession",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicTacToeStop"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Stopped",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicTacToeSession"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Session code not provided",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/games": {
+      "get": {
+        "tags": ["games"],
+        "summary": "Get games",
+        "operationId": "getGames",
+        "responses": {
+          "200": {
+            "description": "Get games",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Games"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scores": {
+      "get": {
+        "tags": ["scores"],
+        "summary": "Get scores",
+        "operationId": "getScores",
+        "responses": {
+          "200": {
+            "description": "Get scores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scores"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scores/{id}": {
+      "get": {
+        "tags": ["scores"],
+        "summary": "Get game scores",
+        "operationId": "getGameScores",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of game",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get game scores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scores"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get information about application",
+        "responses": {
+          "200": {
+            "description": "Information about application received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get ping",
+        "responses": {
+          "200": {
+            "description": "Ping received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get healthcheck",
+        "responses": {
+          "200": {
+            "description": "Healthcheck received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/health/memory": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get memory usage",
+        "responses": {
+          "200": {
+            "description": "Memory usage received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/health/uptime": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get uptime",
+        "responses": {
+          "200": {
+            "description": "Uptime received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/health/configcheck": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get config check result",
+        "responses": {
+          "200": {
+            "description": "config result received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/health/dbcheck": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get dbcheck result",
+        "responses": {
+          "200": {
+            "description": "dbcheck result received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/health/db": {
+      "get": {
+        "tags": ["healthcheck"],
+        "summary": "Get db status",
+        "responses": {
+          "200": {
+            "description": "db status received",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/visits/articles": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get articles visits stats",
+        "operationId": "getArticlesVisitsStats",
+        "responses": {
+          "200": {
+            "description": "Visits received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/top/articles": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get top articles visits stats",
+        "operationId": "getTopArticlesVisitsStats",
+        "responses": {
+          "200": {
+            "description": "Visits received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/articles?ids={id}": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get articles visits stats",
+        "operationId": "getSelectedArticlesVisitsStats",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user or multiple IDs of articles separated by comma",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/users": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get users visits stats",
+        "operationId": "getUsersVisitsStats",
+        "responses": {
+          "200": {
+            "description": "Visits received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/top/users": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get top users visits stats",
+        "operationId": "getTopUsersVisitsStats",
+        "responses": {
+          "200": {
+            "description": "Visits received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/users?ids={id}": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get users visits stats",
+        "operationId": "getSelectedUsersVisitsStats",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user or multiple IDs of users separated by comma",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/comments": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get comments visits stats",
+        "operationId": "getCommentsVisitsStats",
+        "responses": {
+          "200": {
+            "description": "Visits received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/top/comments": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get top comments visits stats",
+        "operationId": "getTopCommentsVisitsStats",
+        "responses": {
+          "200": {
+            "description": "Visits received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/visits/comments?ids={id}": {
+      "get": {
+        "tags": ["visits"],
+        "summary": "Get comments visits stats",
+        "operationId": "getSelectedCommentsVisitsStats",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of user or multiple IDs of comments separated by comma",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Visits"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/surveys/statistics/{type}": {
+      "get": {
+        "tags": ["surveys"],
+        "summary": "Get surveys statistics",
+        "operationId": "getSurveysStatistics",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "type of surveys",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyStatistics"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/surveys/{surveyType}/description": {
+      "get": {
+        "tags": ["surveys"],
+        "summary": "Get surveys description",
+        "operationId": "getSurveysDescription",
+        "parameters": [
+          {
+            "name": "surveyType",
+            "in": "path",
+            "description": "Type of survey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyDescription"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/surveys/{surveyType}/questions/{id}": {
+      "get": {
+        "tags": ["surveys"],
+        "summary": "Get surveys questions",
+        "operationId": "getSurveysQuestions",
+        "parameters": [
+          {
+            "name": "surveyType",
+            "in": "path",
+            "description": "Type of survey",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of question to return its likes",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyQuestion"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/surveys/responses": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["surveys"],
+        "summary": "Get user survey responses",
+        "operationId": "getUserSurveyResponses",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["surveys"],
+        "summary": "Create a new survey response",
+        "operationId": "createSurvey",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SurveyResponse"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Survey created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "422": {
+            "description": "Invalid score data",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/surveys/responses/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["surveys"],
+        "summary": "Get user survey response",
+        "operationId": "getUserSurveyResponse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of response",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/bookmarks/articles": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["bookmarks"],
+        "summary": "Get user articles bookmarks",
+        "operationId": "getUserArticlesBookmarks",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticlesBookmarked"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["bookmarks"],
+        "requestBody": {
+          "description": "Created bookmarks object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBookmark"
+              }
+            }
+          },
+          "required": true
+        },
+        "summary": "Add user articles bookmarks",
+        "operationId": "addUserArticlesBookmarks",
+        "responses": {
+          "200": {
+            "description": "Bookmark added or removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bookmarks"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "First bookmark created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Bookmarks"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "ArticleCreate": {
+        "type": "object",
+        "required": ["title", "body", "date"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title"
+          },
+          "body": {
+            "type": "string",
+            "description": "Article body"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "image": {
+            "type": "string",
+            "description": "Image path"
+          }
+        },
+        "xml": {
+          "name": "Article"
+        }
+      },
+      "Article": {
+        "type": "object",
+        "required": ["user_id", "title", "body", "date"],
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "Title"
+          },
+          "body": {
+            "type": "string",
+            "description": "Article body"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "image": {
+            "type": "string",
+            "description": "Image path"
+          }
+        },
+        "xml": {
+          "name": "Article"
+        }
+      },
+      "Articles": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Article"
+        }
+      },
+      "ArticleUpdate": {
+        "type": "object",
+        "required": ["user_id", "title", "body", "date"],
+        "properties": {
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "Title"
+          },
+          "body": {
+            "type": "string",
+            "description": "Article body"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "image": {
+            "type": "string",
+            "description": "Image path"
+          }
+        },
+        "xml": {
+          "name": "Article"
+        }
+      },
+      "Comment": {
+        "type": "object",
+        "required": ["user_id", "article_id", "body", "date"],
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "article_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "body": {
+            "type": "string",
+            "description": "Comment body"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "Comment"
+        }
+      },
+      "CommentCreate": {
+        "type": "object",
+        "required": ["article_id", "body", "date"],
+        "properties": {
+          "article_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "body": {
+            "type": "string",
+            "description": "Comment body"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-06-30T15:44:31Z"
+          }
+        },
+        "xml": {
+          "name": "Comment"
+        }
+      },
+      "Comments": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Comment"
+        }
+      },
+      "CommentUpdate": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "body": {
+            "type": "string",
+            "description": "Comment body"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "Comment"
+        }
+      },
+      "Users": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/User"
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": ["email", "firstname", "lastname", "avatar"],
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "User"
+        }
+      },
+      "UserUpdate": {
+        "type": "object",
+        "required": ["email", "firstname", "lastname", "avatar"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "avatar": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "User"
+        }
+      },
+      "UserLoginToken": {
+        "type": "object",
+        "required": ["access_token"],
+        "properties": {
+          "access_token": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "UserLoginToken"
+        }
+      },
+      "UploadedFiles": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UploadedFile"
+        }
+      },
+      "UploadedFile": {
+        "type": "object",
+        "required": ["name", "size", "lastModified"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          },
+          "lastModified": {
+            "type": "string"
+          }
+        }
+      },
+      "Labels": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Label"
+        }
+      },
+      "Label": {
+        "type": "object",
+        "required": ["name", "id", "user_id"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "user_id": {
+            "type": "number"
+          }
+        }
+      },
+      "ArticleLabels": {
+        "type": "object",
+        "required": ["label_ids", "id", "article_id"],
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "label_ids": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "article_id": {
+            "type": "number"
+          }
+        }
+      },
+      "ArticleLabelsUpdate": {
+        "type": "object",
+        "required": ["label_ids", "article_id"],
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "label_ids": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "article_id": {
+            "type": "number"
+          }
+        }
+      },
+      "Likes": {
+        "type": "object",
+        "required": ["likes"],
+        "properties": {
+          "likes": {
+            "type": "number"
+          }
+        }
+      },
+      "Like": {
+        "type": "object",
+        "required": ["date", "user_id"],
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "comment_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "article_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "Like"
+        }
+      },
+      "UserLoginData": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "UserLoginData"
+        }
+      },
+      "QuizQuestions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["question", "options"],
+          "properties": {
+            "question": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "QuizAnswer": {
+        "type": "object",
+        "required": ["questionText", "selectedAnswers"],
+        "properties": {
+          "questionText": {
+            "type": "string"
+          },
+          "selectedAnswers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "QuizAnswerValidation": {
+        "type": "object",
+        "required": ["isCorrect"],
+        "properties": {
+          "isCorrect": {
+            "type": "boolean"
+          },
+          "score": {
+            "type": "number"
+          }
+        }
+      },
+      "QuizHighScore": {
+        "type": "object",
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "string"
+              },
+              "game": {
+                "type": "string"
+              },
+              "score": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "MyLikes": {
+        "type": "object",
+        "properties": {
+          "likes": {
+            "type": "object",
+            "example": { "1": true }
+          }
+        }
+      },
+      "QuizQuestionCount": {
+        "type": "object",
+        "required": ["count"],
+        "properties": {
+          "count": {
+            "type": "number"
+          }
+        }
+      },
+      "HangmanRandomWord": {
+        "type": "object",
+        "required": ["word"],
+        "properties": {
+          "count": {
+            "word": "string"
+          }
+        }
+      },
+      "ScoreRecord": {
+        "type": "object",
+        "required": ["score"],
+        "properties": {
+          "score": {
+            "type": "string"
+          }
+        }
+      },
+      "Scores": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "game_id": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "user_id": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "score": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "id": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Games": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "id": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Visits": {
+        "type": "object",
+        "example": { "1": 2 }
+      },
+      "CreateBookmark": {
+        "type": "object",
+        "properties": {
+          "article_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ArticlesBookmarked": {
+        "type": "object",
+        "properties": {
+          "article_ids": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "SurveyDescription": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "object",
+            "properties": {
+              "base": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "SurveyQuestion": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string"
+          }
+        }
+      },
+      "SurveyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "Bookmarks": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "user_id": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "article_ids": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "TicTacToeJoin": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "MoveTicTacToe": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "move": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "example": [0, 0]
+          }
+        }
+      },
+      "TicTacToeSession": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "object",
+            "properties": {
+              "0": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "1": {
+                "oneOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          },
+          "scores": {
+            "type": "object",
+            "properties": {
+              "0": {
+                "type": "number"
+              },
+              "1": {
+                "type": "number"
+              }
+            }
+          },
+          "code": {
+            "type": "string"
+          },
+          "numberOfMatches": {
+            "type": "number"
+          },
+          "hasStarted": {
+            "type": "boolean"
+          },
+          "hasEnded": {
+            "type": "boolean"
+          },
+          "currentTurn": {
+            "type": "number"
+          },
+          "roundTimeInSeconds": {
+            "type": "number"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "currentTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "board": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "TicTacToeStop": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "SimpleRoiParameters": {
+        "type": "object",
+        "properties": {
+          "costPerSprint": {
+            "type": "integer",
+            "description": "The cost associated with each sprint.",
+            "example": 1
+          },
+          "benefitPerSprint": {
+            "type": "integer",
+            "description": "The benefit derived from each sprint.",
+            "example": 1
+          },
+          "numberOfSprints": {
+            "type": "integer",
+            "description": "The total number of sprints planned for the project.",
+            "example": 10
+          }
+        },
+        "required": ["costPerSprint", "benefitPerSprint", "numberOfSprints"]
+      },
+      "SimpleRoiCalculations": {
+        "type": "object",
+        "properties": {
+          "costPerSprint": {
+            "type": "integer",
+            "description": "The cost associated with each sprint.",
+            "example": 1
+          },
+          "benefitPerSprint": {
+            "type": "integer",
+            "description": "The benefit derived from each sprint.",
+            "example": 1
+          },
+          "numberOfSprints": {
+            "type": "integer",
+            "description": "The total number of sprints planned for the project.",
+            "example": 10
+          },
+          "totalCosts": {
+            "type": "integer",
+            "description": "The total costs accumulated over all sprints.",
+            "example": 10
+          },
+          "totalBenefits": {
+            "type": "integer",
+            "description": "The total benefits accumulated over all sprints.",
+            "example": 10
+          },
+          "totalCumulativeCostsPerSprint": {
+            "type": "array",
+            "description": "List of total costs accumulated by each sprint, where the first entry can be null to indicate no data.",
+            "items": {
+              "type": ["integer", "null"]
+            },
+            "example": [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          },
+          "totalCumulativeBenefitsPerSprint": {
+            "type": "array",
+            "description": "List of total benefits accumulated by each sprint, where the first entry can be null to indicate no data.",
+            "items": {
+              "type": ["integer", "null"]
+            },
+            "example": [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          },
+          "profitPerSprint": {
+            "type": "array",
+            "description": "List of profits per each sprint, where the first entry can be null to indicate no data.",
+            "items": {
+              "type": ["integer", "null"]
+            },
+            "example": [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          },
+          "totalCumulativeProfitPerSprint": {
+            "type": "array",
+            "description": "List of cumulative profit per each sprint, where the first entry can be null to indicate no data.",
+            "items": {
+              "type": ["integer", "null"]
+            },
+            "example": [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          },
+          "sprintROI": {
+            "type": "array",
+            "description": "Return on investment for each sprint, where the first entry can be null to indicate no data and other entries are typically integers.",
+            "items": {
+              "type": ["integer", "null"]
+            },
+            "example": [null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          },
+          "sprints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Labels of the sprints."
+          }
+        },
+        "required": [
+          "costPerSprint",
+          "benefitPerSprint",
+          "numberOfSprints",
+          "totalCosts",
+          "totalBenefits",
+          "totalCostsPerSprint",
+          "totalBenefitsPerSprint",
+          "sprintROI"
+        ]
+      },
+      "RoiParameters": {
+        "type": "object",
+        "properties": {
+          "numberOfEnvs": {
+            "type": "integer",
+            "description": "The number of environments in which the test cases are executed.",
+            "example": 1
+          },
+          "numberOfSprints": {
+            "type": "integer",
+            "description": "The total number of sprints covered by the test cases.",
+            "example": 12
+          },
+          "baseTestCases": {
+            "type": "integer",
+            "description": "The initial number of test cases available before any modifications.",
+            "example": 300
+          },
+          "startingTestCases": {
+            "type": "integer",
+            "description": "The number of test cases at the start of testing.",
+            "example": 200
+          },
+          "newTestsPerRelease": {
+            "type": "number",
+            "description": "The proportion of new test cases added per release.",
+            "format": "float",
+            "example": 0.1
+          },
+          "modifiedTestsPerRelease": {
+            "type": "number",
+            "description": "The proportion of existing test cases modified per release.",
+            "format": "float",
+            "example": 0.1
+          },
+          "removedTestsPerRelease": {
+            "type": "number",
+            "description": "The proportion of test cases removed per release.",
+            "format": "float",
+            "example": 0.05
+          },
+          "automationNotApplicable": {
+            "type": "number",
+            "description": "The proportion of test cases where automation is not applicable.",
+            "format": "float",
+            "example": 0.1
+          },
+          "averageEffortOnModificationOfManualTC": {
+            "type": "number",
+            "description": "The average effort required to modify a manual test case, as a fraction of total effort.",
+            "format": "float",
+            "example": 0.1
+          },
+          "averageEffortOnModificationOfAutomatedTC": {
+            "type": "number",
+            "description": "The average effort required to modify an automated test case, as a fraction of total effort.",
+            "format": "float",
+            "example": 0.4
+          },
+          "numberOfAutomationOfBaseTestCases": {
+            "type": "number",
+            "description": "The proportion of base test cases that are automated.",
+            "format": "float",
+            "example": 0.1
+          },
+          "manualCreationHours": {
+            "type": "number",
+            "description": "The number of hours needed to create a manual test case.",
+            "format": "float",
+            "example": 1.5
+          },
+          "manualExecutionHours": {
+            "type": "number",
+            "description": "The number of hours needed to execute a manual test case.",
+            "format": "float",
+            "example": 2
+          },
+          "automationCreationHours": {
+            "type": "number",
+            "description": "The number of hours needed to create an automated test case.",
+            "format": "float",
+            "example": 8
+          },
+          "automationExecutionHours": {
+            "type": "number",
+            "description": "The number of hours needed to execute an automated test case.",
+            "format": "float",
+            "example": 0.05
+          },
+          "additionalMaintenanceHours": {
+            "type": "number",
+            "description": "The additional hours required for maintaining test cases per sprint.",
+            "format": "float",
+            "example": 0.5
+          },
+          "hourlyCost": {
+            "type": "number",
+            "description": "The cost per hour for conducting testing.",
+            "format": "float",
+            "example": 50
+          }
+        },
+        "required": [
+          "numberOfEnvs",
+          "numberOfSprints",
+          "baseTestCases",
+          "startingTestCases",
+          "newTestsPerRelease",
+          "modifiedTestsPerRelease",
+          "removedTestsPerRelease",
+          "automationNotApplicable",
+          "averageEffortOnModificationOfManualTC",
+          "averageEffortOnModificationOfAutomatedTC",
+          "numberOfAutomationOfBaseTestCases",
+          "manualCreationHours",
+          "manualExecutionHours",
+          "automationCreationHours",
+          "automationExecutionHours",
+          "additionalMaintenanceHours",
+          "hourlyCost"
+        ]
+      },
+      "UserActivityStats": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "userActivityByDay": {
+                "type": "object",
+                "properties": {
+                  "Monday": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Tuesday": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Wednesday": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Thursday": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Friday": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Saturday": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "Sunday": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              },
+              "userActivityByMonth": {
+                "type": "object",
+                "properties": {
+                  "July": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "January": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "August": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "June": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "September": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "November": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "October": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "May": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "April": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "December": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "February": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "March": {
+                    "type": "object",
+                    "properties": {
+                      "articles": {
+                        "type": "integer"
+                      },
+                      "comments": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              },
+              "userActivityByYear": { "type": "object" }
+            }
+          }
+        }
+      },
+      "RoiCalculations": {
+        "type": "object",
+        "properties": {
+          "numberOfEnvs": {
+            "type": "integer",
+            "description": "Number of testing environments."
+          },
+          "numberOfSprints": {
+            "type": "integer",
+            "description": "Number of sprints for the project."
+          },
+          "baseTestCases": {
+            "type": "integer",
+            "description": "Base number of test cases at the beginning of the project."
+          },
+          "startingTestCases": {
+            "type": "integer",
+            "description": "Number of test cases available at the start."
+          },
+          "newTestsPerRelease": {
+            "type": "number",
+            "format": "float",
+            "description": "Percentage of new tests added per release."
+          },
+          "modifiedTestsPerRelease": {
+            "type": "number",
+            "format": "float",
+            "description": "Percentage of tests modified per release."
+          },
+          "removedTestsPerRelease": {
+            "type": "number",
+            "format": "float",
+            "description": "Percentage of tests removed per release."
+          },
+          "automationNotApplicable": {
+            "type": "number",
+            "format": "float",
+            "description": "Percentage of tests not suitable for automation."
+          },
+          "averageEffortOnModificationOfManualTC": {
+            "type": "number",
+            "format": "float",
+            "description": "Average effort required to modify a manual test case."
+          },
+          "averageEffortOnModificationOfAutomatedTC": {
+            "type": "number",
+            "format": "float",
+            "description": "Average effort required to modify an automated test case."
+          },
+          "numberOfAutomationOfBaseTestCases": {
+            "type": "number",
+            "format": "float",
+            "description": "Percentage of base test cases that are automated."
+          },
+          "manualCreationHours": {
+            "type": "number",
+            "format": "float",
+            "description": "Hours required to create a manual test case."
+          },
+          "manualExecutionHours": {
+            "type": "number",
+            "format": "float",
+            "description": "Hours required to execute a manual test case."
+          },
+          "automationCreationHours": {
+            "type": "number",
+            "format": "float",
+            "description": "Hours required to create an automated test case."
+          },
+          "automationExecutionHours": {
+            "type": "number",
+            "format": "float",
+            "description": "Hours required to execute an automated test case."
+          },
+          "additionalMaintenanceHours": {
+            "type": "number",
+            "format": "float",
+            "description": "Additional hours per sprint for maintenance."
+          },
+          "hourlyCost": {
+            "type": "number",
+            "format": "float",
+            "description": "Cost per hour for testing."
+          },
+          "sprints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Labels of the sprints."
+          },
+          "newTests": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Number of new tests introduced in each sprint."
+          },
+          "totalTestCases": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Total number of test cases after each sprint."
+          },
+          "modifiedTests": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Number of modified tests in each sprint."
+          },
+          "removedTests": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Number of removed tests in each sprint."
+          },
+          "automationNotApplicableTests": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Count of tests unsuitable for automation in each sprint."
+          },
+          "manual": {
+            "type": "object",
+            "properties": {
+              "effort": {
+                "type": "object",
+                "properties": {
+                  "creation": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Effort in hours for creating manual test cases per sprint."
+                  },
+                  "execution": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Effort in hours for executing manual test cases per sprint."
+                  }
+                }
+              },
+              "cost": {
+                "type": "object",
+                "properties": {
+                  "creation": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Cost of creating manual test cases per sprint."
+                  },
+                  "execution": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Cost of executing manual test cases per sprint."
+                  },
+                  "total": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Total manual testing cost per sprint."
+                  }
+                }
+              }
+            }
+          },
+          "automation": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "description": "Total number of automated tests per sprint."
+              },
+              "effort": {
+                "type": "object",
+                "properties": {
+                  "creation": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Effort in hours for creating automated test cases per sprint."
+                  },
+                  "execution": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Effort in hours for executing automated test cases per sprint."
+                  },
+                  "maintenance": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Maintenance hours for automated test cases per sprint."
+                  }
+                }
+              },
+              "cost": {
+                "type": "object",
+                "properties": {
+                  "creation": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Cost of creating automated test cases per sprint."
+                  },
+                  "execution": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Cost of executing automated test cases per sprint."
+                  },
+                  "maintenance": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Maintenance costs for automated test cases per sprint."
+                  },
+                  "total": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "description": "Total cost of automation per sprint."
+                  }
+                }
+              }
+            }
+          },
+          "diff": {
+            "type": "object",
+            "properties": {
+              "automationAdditionalCosts": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "description": "Additional costs incurred due to automation per sprint."
+              }
+            }
+          },
+          "roi": {
+            "type": "number",
+            "format": "float",
+            "description": "Return on investment from the project."
+          }
+        },
+        "required": [
+          "numberOfEnvs",
+          "numberOfSprints",
+          "baseTestCases",
+          "startingTestCases",
+          "newTestsPerRelease",
+          "modifiedTestsPerRelease",
+          "removedTestsPerRelease",
+          "automationNotApplicable",
+          "averageEffortOnModificationOfManualTC",
+          "averageEffortOnModificationOfAutomatedTC",
+          "numberOfAutomationOfBaseTestCases",
+          "manualCreationHours",
+          "manualExecutionHours",
+          "automationCreationHours",
+          "automationExecutionHours",
+          "additionalMaintenanceHours",
+          "hourlyCost",
+          "sprints",
+          "newTests",
+          "totalTestCases",
+          "modifiedTests",
+          "removedTests",
+          "automationNotApplicableTests"
+        ]
+      }
+    }
+  }
+}
