@@ -6,13 +6,17 @@ test.describe('User login to GAD', () => {
   });
 
   test('should log in with valid credentials', async ({ page }) => {
+    const userId = 'testEmail@testmail.com';
+    const userPassword = 'testPassword';
+    const expectedUrl = 'http://localhost:3000/welcome';
+
     await page.getByTestId('user-dropdown').hover();
     await page.locator('#loginBtn').click();
-    await page.locator('#username').nth(1).fill('testEmail@testmail.com');
-    await page.locator('#password').fill('testPassword');
+    await page.locator('#username').nth(1).fill(userId);
+    await page.locator('#password').fill(userPassword);
     await page.locator('#loginButton').click();
 
-    await page.waitForURL('http://localhost:3000/welcome');
-    expect(page.url()).toBe('http://localhost:3000/welcome');
+    await page.waitForURL(expectedUrl);
+    await expect(page.url()).toBe(expectedUrl);
   });
 });
