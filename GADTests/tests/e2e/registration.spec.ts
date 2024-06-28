@@ -17,9 +17,9 @@ test.describe('User registration to GAD', () => {
   });
 
   test(
-    'should register with valid credentials',
+    'user should register with valid credentials',
     {
-      tag: '@happyPath',
+      tag: '@happyPath, @e2e',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -44,9 +44,9 @@ test.describe('User registration to GAD', () => {
   );
 
   test(
-    'should not register with email not unique',
+    'user should not register with email not unique',
     {
-      tag: '@unhappyPath',
+      tag: '@unhappyPath, @e2e',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -71,9 +71,9 @@ test.describe('User registration to GAD', () => {
   );
 
   test(
-    'should not register without email',
+    'user should not register without email',
     {
-      tag: '@unhappyPath',
+      tag: '@unhappyPath, @e2e',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -96,9 +96,9 @@ test.describe('User registration to GAD', () => {
   );
 
   test(
-    'should not register without first name',
+    'user should not register without first name',
     {
-      tag: '@unhappyPath',
+      tag: '@unhappyPath, @e2e',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -120,7 +120,30 @@ test.describe('User registration to GAD', () => {
     },
   );
 
-  // test('should not register without last name', { tag: '@unhappyPath' }, async ({ page }) => {});
+  test(
+    'user should not register without last name',
+    {
+      tag: '@unhappyPath, @e2e',
+      annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
+    },
+    async ({ page }) => {
+      const firstNameId = 'testName';
+      const emailId = 'testEmail@testmail.com';
+      const birthDateId = '2000-01-01';
+      const passwordId = 'testPassword';
+      const lastNameValidatorInfoId = page.locator('#octavalidate_lastname');
+
+      await page.getByTestId('firstname-input').fill(firstNameId);
+      await page.getByTestId('email-input').fill(emailId);
+      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.click('body');
+      await page.getByTestId('password-input').fill(passwordId);
+      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('#registerButton').click();
+
+      expect(lastNameValidatorInfoId).toHaveText('This field is required');
+    },
+  );
 
   // test('should not register without password', { tag: '@unhappyPath' }, async ({ page }) => {});
 });
