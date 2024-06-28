@@ -19,7 +19,7 @@ test.describe('User registration to GAD', () => {
   test(
     'user should register with valid credentials',
     {
-      tag: ['@unhappyPath', '@e2e'],
+      tag: ['@happyPath', '@databaseDependent'],
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -46,7 +46,7 @@ test.describe('User registration to GAD', () => {
   test(
     'user should not register with email not unique',
     {
-      tag: ['@unhappyPath', '@e2e'],
+      tag: ['@unhappyPath', '@databaseDependent'],
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -73,7 +73,7 @@ test.describe('User registration to GAD', () => {
   test(
     'user should not register without email',
     {
-      tag: ['@unhappyPath', '@e2e'],
+      tag: '@unhappyPath',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -98,7 +98,7 @@ test.describe('User registration to GAD', () => {
   test(
     'user should not register without first name',
     {
-      tag: ['@unhappyPath', '@e2e'],
+      tag: '@unhappyPath',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -123,7 +123,7 @@ test.describe('User registration to GAD', () => {
   test(
     'user should not register without last name',
     {
-      tag: ['@unhappyPath', '@e2e'],
+      tag: '@unhappyPath',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
@@ -148,7 +148,7 @@ test.describe('User registration to GAD', () => {
   test(
     'user should not register without password',
     {
-      tag: ['@unhappyPath', '@e2e'],
+      tag: '@unhappyPath',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
