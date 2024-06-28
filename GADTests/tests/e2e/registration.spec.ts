@@ -55,6 +55,7 @@ test.describe('User registration to GAD', () => {
       const emailId = 'testEmail@testmail.com';
       const birthDateId = '2000-01-01';
       const passwordId = 'testPassword';
+      const alertPopupId = page.getByTestId('alert-popup');
 
       await page.getByTestId('firstname-input').fill(firstNameId);
       await page.getByTestId('lastname-input').fill(lastNameId);
@@ -65,7 +66,7 @@ test.describe('User registration to GAD', () => {
       await page.locator('#avatar').nth(1).selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      await expect(page.getByTestId('alert-popup')).toHaveText('User not created! Email not unique');
+      await expect(alertPopupId).toHaveText('User not created! Email not unique');
     },
   );
 
@@ -80,6 +81,7 @@ test.describe('User registration to GAD', () => {
       const lastNameId = 'testLastName';
       const birthDateId = '2000-01-01';
       const passwordId = 'testPassword';
+      const emailValidatorInfoId = page.locator('#octavalidate_email');
 
       await page.getByTestId('firstname-input').fill(firstNameId);
       await page.getByTestId('lastname-input').fill(lastNameId);
@@ -89,7 +91,7 @@ test.describe('User registration to GAD', () => {
       await page.locator('#avatar').nth(1).selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      await expect(page.locator('#octavalidate_email')).toHaveText('This field is required');
+      await expect(emailValidatorInfoId).toHaveText('This field is required');
     },
   );
 
@@ -104,6 +106,7 @@ test.describe('User registration to GAD', () => {
       const emailId = 'testEmail@testmail.com';
       const birthDateId = '2000-01-01';
       const passwordId = 'testPassword';
+      const firstNameValidatorInfoId = page.locator('#octavalidate_firstname');
 
       await page.getByTestId('lastname-input').fill(lastNameId);
       await page.getByTestId('email-input').fill(emailId);
@@ -113,7 +116,7 @@ test.describe('User registration to GAD', () => {
       await page.locator('#avatar').nth(1).selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      await expect(page.locator('#octavalidate_firstname')).toHaveText('This field is required');
+      await expect(firstNameValidatorInfoId).toHaveText('This field is required');
     },
   );
 
