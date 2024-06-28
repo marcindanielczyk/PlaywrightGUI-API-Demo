@@ -93,9 +93,31 @@ test.describe('User registration to GAD', () => {
     },
   );
 
-  // test('should not register without firstname', { tag: '@unhappyPath' }, async ({ page }) => {});
+  test(
+    'should not register without first name',
+    {
+      tag: '@unhappyPath',
+      annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
+    },
+    async ({ page }) => {
+      const lastNameId = 'testLastName';
+      const emailId = 'testEmail@testmail.com';
+      const birthDateId = '2000-01-01';
+      const passwordId = 'testPassword';
 
-  // test('should not register without lastname', { tag: '@unhappyPath' }, async ({ page }) => {});
+      await page.getByTestId('lastname-input').fill(lastNameId);
+      await page.getByTestId('email-input').fill(emailId);
+      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.click('body');
+      await page.getByTestId('password-input').fill(passwordId);
+      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('#registerButton').click();
+
+      await expect(page.locator('#octavalidate_firstname')).toHaveText('This field is required');
+    },
+  );
+
+  // test('should not register without last name', { tag: '@unhappyPath' }, async ({ page }) => {});
 
   // test('should not register without password', { tag: '@unhappyPath' }, async ({ page }) => {});
 });
