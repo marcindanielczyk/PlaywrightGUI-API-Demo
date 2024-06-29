@@ -1,18 +1,25 @@
 import { test, expect } from 'playwright/test';
 
 test.describe('User registration to GAD', () => {
-  const registerUrl = 'http://localhost:3000/register.html';
-  const loginUrl = 'http://localhost:3000/login/';
+  const firstNameId = 'testName';
+  const lastNameId = 'testLastName';
+  const emailId = 'testEmail@testmail.com';
+  const birthDateId = '2000-01-01';
+  const passwordId = 'testPassword';
 
   test.beforeAll(async ({ request }) => {
     const restoreDB = await request.get('/api/restoreDB');
+
     expect(restoreDB.ok()).toBeTruthy();
   });
 
   test.beforeEach(async ({ page }) => {
+    const registerUrl = 'http://localhost:3000/register.html';
+
     await page.goto('/');
     await page.getByTestId('user-dropdown').hover();
     await page.locator('#registerBtn').click();
+
     expect(page.url()).toBe(registerUrl);
   });
 
@@ -23,11 +30,7 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const firstNameId = 'testName';
-      const lastNameId = 'testLastName';
-      const emailId = 'testEmail@testmail.com';
-      const birthDateId = '2000-01-01';
-      const passwordId = 'testPassword';
+      const loginUrl = 'http://localhost:3000/login/';
 
       await page.getByTestId('firstname-input').fill(firstNameId);
       await page.getByTestId('lastname-input').fill(lastNameId);
@@ -37,8 +40,8 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('password-input').fill(passwordId);
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
-
       await page.waitForURL(loginUrl);
+
       expect(page.url()).toBe(loginUrl);
     },
   );
@@ -50,11 +53,6 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const firstNameId = 'testName';
-      const lastNameId = 'testLastName';
-      const emailId = 'testEmail@testmail.com';
-      const birthDateId = '2000-01-01';
-      const passwordId = 'testPassword';
       const alertPopupId = page.getByTestId('alert-popup');
 
       await page.getByTestId('firstname-input').fill(firstNameId);
@@ -77,10 +75,6 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const firstNameId = 'testName';
-      const lastNameId = 'testLastName';
-      const birthDateId = '2000-01-01';
-      const passwordId = 'testPassword';
       const emailValidatorInfoId = page.locator('#octavalidate_email');
 
       await page.getByTestId('firstname-input').fill(firstNameId);
@@ -102,10 +96,6 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const lastNameId = 'testLastName';
-      const emailId = 'testEmail@testmail.com';
-      const birthDateId = '2000-01-01';
-      const passwordId = 'testPassword';
       const firstNameValidatorInfoId = page.locator('#octavalidate_firstname');
 
       await page.getByTestId('lastname-input').fill(lastNameId);
@@ -127,10 +117,6 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const firstNameId = 'testName';
-      const emailId = 'testEmail@testmail.com';
-      const birthDateId = '2000-01-01';
-      const passwordId = 'testPassword';
       const lastNameValidatorInfoId = page.locator('#octavalidate_lastname');
 
       await page.getByTestId('firstname-input').fill(firstNameId);
@@ -152,10 +138,6 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const firstNameId = 'testName';
-      const lastNameId = 'testLastName';
-      const emailId = 'testEmail@testmail.com';
-      const birthDateId = '2000-01-01';
       const passwordValidatorInfoId = page.locator('#octavalidate_password');
 
       await page.getByTestId('firstname-input').fill(firstNameId);
