@@ -35,7 +35,7 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
       await page.getByTestId('password-input').fill(passwordId);
-      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
       await page.waitForURL(loginUrl);
@@ -63,7 +63,7 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
       await page.getByTestId('password-input').fill(passwordId);
-      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
       await expect(alertPopupId).toHaveText('User not created! Email not unique');
@@ -88,7 +88,7 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
       await page.getByTestId('password-input').fill(passwordId);
-      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
       await expect(emailValidatorInfoId).toHaveText('This field is required');
@@ -113,7 +113,7 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
       await page.getByTestId('password-input').fill(passwordId);
-      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
       await expect(firstNameValidatorInfoId).toHaveText('This field is required');
@@ -138,7 +138,7 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
       await page.getByTestId('password-input').fill(passwordId);
-      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
       expect(lastNameValidatorInfoId).toHaveText('This field is required');
@@ -163,7 +163,7 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('email-input').fill(emailId);
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
-      await page.locator('#avatar').nth(1).selectOption({ index: 1 });
+      await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
       expect(passwordValidatorInfoId).toHaveText('This field is required');
