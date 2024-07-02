@@ -1,19 +1,46 @@
 import { test, expect } from 'playwright/test';
 
 test.describe('User login to GAD', () => {
+  const firstNameId = 'testName';
+  const lastNameId = 'testLastName';
+  const emailId = 'okokokok@testmail.com';
+  const birthDateId = '2000-01-01';
+  const passwordId = 'testPassword';
+  const avatarId = '.\\data\\users\\16709f41-acf3-4738-b4f8-0616a6b6e7ae.jpg';
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.getByTestId('user-dropdown').hover();
     await page.locator('#loginBtn').click();
   });
 
-  test('user should log in with valid credentials', { tag: '@happyPath' }, async ({ page }) => {
-    const userEmail = 'testEmail@testmail.com';
-    const userPassword = 'testPassword';
+  test.beforeAll(async ({ request }) => {
+    const restoreDB = await request.get('/api/restoreDB');
+
+    expect(restoreDB.ok()).toBeTruthy();
+
+    const createNewUser = await request.post('/api/users', {
+      data: {
+        firstname: firstNameId,
+        lastname: lastNameId,
+        email: emailId,
+        password: passwordId,
+        avatar: avatarId,
+      },
+    });
+    expect(createNewUser.ok()).toBeTruthy();
+  });
+
+  test('user should log in with valid credentials', { tag: '@happyPath' }, async ({ page, request }) => {
     const welcomeUrl = 'http://localhost:3000/welcome';
 
-    await page.locator('#username').nth(1).fill(userEmail);
-    await page.locator('#password').fill(userPassword);
+    // w wypadku takiego dodania uzytkownika i tak przy kolejnym puszczeniu testu, ten uzytkownik juz istnieje wiec jest konflikt, stworzony uzytkownik
+    // czyli no zostaje ten restoreDB, prawdziwy mock albo stworzyenie uzytkownika w beforeEach/beforeAll i usuniecie go po wykonaniu testow afterall/aftereach
+    // no jeszcze moze byc usuniecie go tylko po tym tescie czy jakos tak
+    // tez teoretycznie tego fakera mozna sprobowac no ale nwm
+
+    await page.locator('input#username').fill(emailId);
+    await page.locator('#password').fill(passwordId);
     await page.locator('#loginButton').click();
 
     await page.waitForURL(welcomeUrl);
