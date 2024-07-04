@@ -40,8 +40,8 @@ test.describe('User registration to GAD', () => {
       await page.getByTestId('password-input').fill(passwordId);
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
-
       await page.waitForURL(loginUrl);
+
       expect(page.url()).toBe(loginUrl);
     },
   );
