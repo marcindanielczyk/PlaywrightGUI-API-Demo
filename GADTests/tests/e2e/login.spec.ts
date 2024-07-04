@@ -19,7 +19,7 @@ test.describe('User login to GAD', () => {
 
     expect(restoreDB.ok()).toBeTruthy();
 
-    const createNewUser = await request.post('/api/users', {
+    const createNewUser = await request.post('api/users', {
       data: {
         firstname: firstNameId,
         lastname: lastNameId,
@@ -48,8 +48,23 @@ test.describe('User login to GAD', () => {
     console.log(body);
 
     if (body.length > 0) {
+      const loginToGetAccessToken = await request.post('api/login', {
+        data: {
+          email: emailId,
+          password: passwordId,
+        },
+      });
+      expect(loginToGetAccessToken.ok()).toBeTruthy();
+
+      const accessTokenBody = await loginToGetAccessToken.json();
+      const accessToken = accessTokenBody.access_token;
+
       const userId = body[0].id;
-      const deleteUser = await request.delete(`api/users/${userId}`);
+      const deleteUser = await request.delete(`api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       expect(deleteUser.ok()).toBeTruthy();
     }
 
@@ -57,11 +72,7 @@ test.describe('User login to GAD', () => {
     await page.locator('#password').fill(passwordId);
     await page.locator('#loginButton').click();
 
-    const loginErrorMessage = await page.locator('login-error').innerText();
+    const loginErrorMessage = await page.getByTestId('login-error').innerText();
     expect(loginErrorMessage).toBe('Invalid username or password');
   });
-
-  // user should not log in without email provided
-
-  // user should not log in without password provided
 });
