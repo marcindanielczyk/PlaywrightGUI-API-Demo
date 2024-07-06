@@ -78,5 +78,7 @@ test.describe('User login to GAD', () => {
         expect(loginErrorMessage).toBe('Invalid username or password');
       },
     );
+
+    test('user should not log in without login', { tag: '@unhappyPath' }, async ({ page }) => {});
   });
-});
+}); 
