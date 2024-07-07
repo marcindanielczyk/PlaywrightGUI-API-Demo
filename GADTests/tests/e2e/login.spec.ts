@@ -9,9 +9,13 @@ test.describe('User login to GAD', () => {
   });
 
   test.beforeEach(async ({ page }) => {
+    const loginUrl = 'http://localhost:3000/login/';
+
     await page.goto('/');
     await page.getByTestId('user-dropdown').hover();
     await page.locator('#loginBtn').click();
+
+    expect(page.url()).toBe(loginUrl);
   });
 
   test('user should log in with valid credentials', { tag: '@happyPath' }, async ({ page, request }) => {
