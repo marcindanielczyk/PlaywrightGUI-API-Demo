@@ -27,7 +27,7 @@ test.describe('User registration to GAD', () => {
     'user should register with valid credentials',
     {
       tag: ['@happyPath', '@databaseDependent'],
-      annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
+      annotation: { type: 'link', description: 'https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
       const loginUrl = 'http://localhost:3000/login/';
