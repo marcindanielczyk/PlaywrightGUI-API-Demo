@@ -1,4 +1,6 @@
 import { test, expect } from 'playwright/test';
+import { v4 as UUID4 } from 'uuid';
+import { createUser, deleteUser } from '../../pages/login.page';
 
 test.describe('User registration to GAD', () => {
   const firstNameId = 'testName';
@@ -26,15 +28,17 @@ test.describe('User registration to GAD', () => {
   test(
     'user should register with valid credentials',
     {
-      tag: ['@happyPath', '@databaseDependent'],
-      annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
+      tag: '@happyPath',
+      annotation: { type: 'link', description: 'https://jaktestowac.pl/about-gad/#Main_features' },
     },
-    async ({ page }) => {
+    async ({ page, request }) => {
+      const email = `test-${UUID4()}@example.com`;
+      await deleteUser(request, email);
       const loginUrl = 'http://localhost:3000/login/';
 
       await page.getByTestId('firstname-input').fill(firstNameId);
       await page.getByTestId('lastname-input').fill(lastNameId);
-      await page.getByTestId('email-input').fill(emailId);
+      await page.getByTestId('email-input').fill(email);
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
       await page.getByTestId('password-input').fill(passwordId);
@@ -43,21 +47,26 @@ test.describe('User registration to GAD', () => {
 
       await page.waitForURL(loginUrl);
       expect(page.url()).toBe(loginUrl);
+
+      await deleteUser(request, email);
     },
   );
 
   test(
     'user should not register with email not unique',
     {
-      tag: ['@unhappyPath', '@databaseDependent'],
+      tag: '@unhappyPath',
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
-    async ({ page }) => {
+    async ({ page, request }) => {
+      const email = `test-${UUID4()}@example.com`;
+      await createUser(request, email);
+
       const alertPopupId = page.getByTestId('alert-popup');
 
       await page.getByTestId('firstname-input').fill(firstNameId);
       await page.getByTestId('lastname-input').fill(lastNameId);
-      await page.getByTestId('email-input').fill(emailId);
+      await page.getByTestId('email-input').fill(email);
       await page.getByTestId('birthdate-input').fill(birthDateId);
       await page.click('body');
       await page.getByTestId('password-input').fill(passwordId);
@@ -65,6 +74,8 @@ test.describe('User registration to GAD', () => {
       await page.locator('#registerButton').click();
 
       await expect(alertPopupId).toHaveText('User not created! Email not unique');
+
+      await deleteUser(request, email);
     },
   );
 

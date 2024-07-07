@@ -5,7 +5,6 @@
 This is a Test Automation project based on `Playwright` and `TypeScript`.  
 The tested page is a simple application to test GUI and API (GAD - web app created by creators of jaktestowac.pl)
 
-
 ### Updating Playwright
 
 - check if Playwright should be updated  
