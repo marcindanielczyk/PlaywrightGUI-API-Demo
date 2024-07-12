@@ -1,6 +1,6 @@
 import { expect } from 'playwright/test';
 
-export const createUser = async (request, email) => {
+export const createDefaultUser = async (request, email) => {
   const createNewUser = await request.post('api/users', {
     data: {
       firstname: 'testName',
@@ -29,4 +29,26 @@ export const deleteUser = async (request, email) => {
     });
     expect(deleteUser.ok()).toBeTruthy();
   }
+};
+
+export const logInAsDefaultUserWithGUI = async (page, request, email) => {
+  const loginUrl = 'http://localhost:3000/login/';
+
+  await page.goto('/');
+  await page.getByTestId('user-dropdown').hover();
+  await page.locator('#loginBtn').click();
+
+  expect(page.url()).toBe(loginUrl);
+
+  await createDefaultUser(request, email);
+
+  const welcomeUrl = 'http://localhost:3000/welcome';
+
+  await page.locator('input#username').fill(email);
+  await page.locator('#password').fill('testPassword');
+  await page.locator('#loginButton').click();
+
+  await page.waitForURL(welcomeUrl);
+  expect(page.url()).toBe(welcomeUrl);
+  
 };

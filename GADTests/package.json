@@ -6,7 +6,8 @@
   "scripts": {
     "format": "npx prettier --write .",
     "test": "npx playwright test",
-    "test:headed": "npx playwright test --headed"
+    "test:headed": "npx playwright test --headed",
+    "test:report": "npx playwright show-report"
   },
   "keywords": [],
   "author": "",

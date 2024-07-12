@@ -1,6 +1,6 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { createUser, deleteUser } from '../../pages/login.page';
+import { createUser, deleteUser } from '../../pages/users.page';
 
 test.describe('User registration to GAD', () => {
   const firstNameId = 'testName';
