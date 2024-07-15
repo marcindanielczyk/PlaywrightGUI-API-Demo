@@ -16,7 +16,6 @@ export const createDefaultUser = async (request, email) => {
 export const deleteUser = async (request, email) => {
   const checkIfUserDoesExist = await request.get(`api/users?email=${email}`);
   const body = await checkIfUserDoesExist.json();
-  console.log(body);
   if (body.length > 0) {
     const loginToGetAccessToken = await request.post('api/login', {
       data: { email: email, password: 'testPassword' },
@@ -50,5 +49,4 @@ export const logInAsDefaultUserWithGUI = async (page, request, email) => {
 
   await page.waitForURL(welcomeUrl);
   expect(page.url()).toBe(welcomeUrl);
-  
 };
