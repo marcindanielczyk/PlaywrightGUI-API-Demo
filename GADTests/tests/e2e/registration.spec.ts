@@ -1,6 +1,6 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { createUser, deleteUser } from '../../pages/users.page';
+import { createDefaultUser, deleteUser } from '../../pages/users.page';
 
 test.describe('User registration to GAD', () => {
   const firstNameId = 'testName';
@@ -60,7 +60,7 @@ test.describe('User registration to GAD', () => {
     },
     async ({ page, request }) => {
       const email = `test-${UUID4()}@example.com`;
-      await createUser(request, email);
+      await createDefaultUser(request, email);
 
       const alertPopupId = page.getByTestId('alert-popup');
 

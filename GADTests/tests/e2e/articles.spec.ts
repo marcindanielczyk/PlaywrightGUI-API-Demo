@@ -19,7 +19,7 @@ test.describe('Test articles with user logged in to GAD', () => {
     expect(page.url()).toBe(articlesUrl);
   });
 
-  test('create article when user logged in', { tag: '@happyPath' }, async ({ page }) => {
+  test('create article with user logged in', { tag: '@happyPath' }, async ({ page }) => {
     await page.locator('#add-new').click();
     await page.getByTestId('title-input').fill('testTitle');
     await page.getByTestId('body-text').fill('testBody');
@@ -30,7 +30,9 @@ test.describe('Test articles with user logged in to GAD', () => {
     const alertText = await page.getByTestId('alert-popup').innerText();
     expect(alertText).toBe('Article was created');
   });
-  // test("edit article when user logged in")
+  test('edit article with user logged in', { tag: '@happyPath' }, async ({ page }) => {
+
+  });
   // test("delete article when user logged in")
   // test("view article when user logged in")
   // test("list articles when user logged in")
