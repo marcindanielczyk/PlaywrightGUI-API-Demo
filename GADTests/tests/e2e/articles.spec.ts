@@ -1,15 +1,17 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { logInAsDefaultUserWithGUI } from '../../pages/users.page';
+import { logInAsDefaultUserWithGUI } from '../../helpers/users/logInAsDefaultUserWithGUI';
+
 
 test.describe('Test articles with user logged in to GAD', () => {
+  const email = `test-${UUID4()}@example.com`;
+
   test.beforeAll(async ({ request }) => {
     const restoreDB = await request.get('/api/restoreDB');
     expect(restoreDB.ok()).toBeTruthy();
   });
 
   test.beforeEach(async ({ page, request }) => {
-    const email = `test-${UUID4()}@example.com`;
     await logInAsDefaultUserWithGUI(page, request, email);
 
     const articlesUrl = 'http://localhost:3000/articles.html';
@@ -19,7 +21,7 @@ test.describe('Test articles with user logged in to GAD', () => {
     expect(page.url()).toBe(articlesUrl);
   });
 
-  test('create article with user logged in', { tag: '@happyPath' }, async ({ page }) => {
+  test('create article with user logged in', { tag: '@happyPath' }, async ({ page, request }) => {
     await page.locator('#add-new').click();
     await page.getByTestId('title-input').fill('testTitle');
     await page.getByTestId('body-text').fill('testBody');
@@ -29,6 +31,8 @@ test.describe('Test articles with user logged in to GAD', () => {
 
     const alertText = await page.getByTestId('alert-popup').innerText();
     expect(alertText).toBe('Article was created');
+
+    
   });
   test('edit article with user logged in', { tag: '@happyPath' }, async ({ page }) => {
 

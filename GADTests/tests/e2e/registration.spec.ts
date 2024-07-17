@@ -1,6 +1,7 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { createDefaultUser, deleteUser } from '../../pages/users.page';
+import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
+import { createDefaultUser } from '../../helpers/users/createDefaultUser';
 
 test.describe('User registration to GAD', () => {
   const firstNameId = 'testName';
@@ -33,7 +34,7 @@ test.describe('User registration to GAD', () => {
     },
     async ({ page, request }) => {
       const email = `test-${UUID4()}@example.com`;
-      await deleteUser(request, email);
+      await deleteUserIfExists(request, email);
       const loginUrl = 'http://localhost:3000/login/';
 
       await page.getByTestId('firstname-input').fill(firstNameId);
@@ -48,7 +49,7 @@ test.describe('User registration to GAD', () => {
       await page.waitForURL(loginUrl);
       expect(page.url()).toBe(loginUrl);
 
-      await deleteUser(request, email);
+      await deleteUserIfExists(request, email);
     },
   );
 
@@ -75,7 +76,7 @@ test.describe('User registration to GAD', () => {
 
       await expect(alertPopupId).toHaveText('User not created! Email not unique');
 
-      await deleteUser(request, email);
+      await deleteUserIfExists(request, email);
     },
   );
 
