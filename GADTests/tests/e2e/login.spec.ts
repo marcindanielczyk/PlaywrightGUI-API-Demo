@@ -1,6 +1,7 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { createDefaultUser, deleteUser } from '../../pages/users.page';
+import { createDefaultUser } from '../../helpers/users/createDefaultUser';
+import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
 
 test.describe('User login to GAD', () => {
   test.beforeAll(async ({ request }) => {
@@ -31,12 +32,12 @@ test.describe('User login to GAD', () => {
     await page.waitForURL(welcomeUrl);
     expect(page.url()).toBe(welcomeUrl);
 
-    await deleteUser(request, email);
+    await deleteUserIfExists(request, email);
   });
 
   test('user should not log in if does not exist', { tag: '@unhappyPath' }, async ({ page, request }) => {
     const email = `test-${UUID4()}@example.com`;
-    await deleteUser(request, email);
+    await deleteUserIfExists(request, email);
 
     await page.locator('input#username').fill(email);
     await page.locator('#password').fill('testPassword');
@@ -56,7 +57,7 @@ test.describe('User login to GAD', () => {
     const loginErrorMessage = await page.getByTestId('login-error').innerText();
     expect(loginErrorMessage).toBe('Invalid username or password');
 
-    await deleteUser(request, email);
+    await deleteUserIfExists(request, email);
   });
 
   test('user should not log in without password provided', { tag: '@unhappyPath' }, async ({ page, request }) => {
@@ -69,6 +70,6 @@ test.describe('User login to GAD', () => {
     const loginErrorMessage = await page.getByTestId('login-error').innerText();
     expect(loginErrorMessage).toBe('Invalid username or password');
 
-    await deleteUser(request, email);
+    await deleteUserIfExists(request, email);
   });
 });
