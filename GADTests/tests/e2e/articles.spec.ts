@@ -1,7 +1,8 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
 import { logInAsDefaultUserWithGUI } from '../../helpers/users/logInAsDefaultUserWithGUI';
-
+import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
+import { deleteArticle } from '../../helpers/articles/deleteArticle';
 
 test.describe('Test articles with user logged in to GAD', () => {
   const email = `test-${UUID4()}@example.com`;
@@ -21,22 +22,33 @@ test.describe('Test articles with user logged in to GAD', () => {
     expect(page.url()).toBe(articlesUrl);
   });
 
+  test.afterEach(async ({ request }) => {
+    await deleteUserIfExists(request, email);
+  });
+
   test('create article with user logged in', { tag: '@happyPath' }, async ({ page, request }) => {
     await page.locator('#add-new').click();
     await page.getByTestId('title-input').fill('testTitle');
     await page.getByTestId('body-text').fill('testBody');
+
+    const responsePromise = page.waitForResponse((response) => response.url().includes('/api/articles') && response.status() === 201);
+
     await page.getByTestId('save').click();
 
-    await page.getByTestId('alert-popup').waitFor({ state: 'visible' });
+    const response = await responsePromise;
 
+    const headers = response.headers();
+    const locationHeader = headers['location'];
+    const articleId = locationHeader.split('/').pop();
+
+    await page.getByTestId('alert-popup').waitFor({ state: 'visible' });
     const alertText = await page.getByTestId('alert-popup').innerText();
     expect(alertText).toBe('Article was created');
 
-    
+    await deleteArticle(request, articleId);
   });
-  test('edit article with user logged in', { tag: '@happyPath' }, async ({ page }) => {
 
-  });
+  // test('edit article with user logged in', { tag: '@happyPath' }, async ({ page }) => {});
   // test("delete article when user logged in")
   // test("view article when user logged in")
   // test("list articles when user logged in")
