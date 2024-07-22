@@ -2,7 +2,7 @@ import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
 import { logInAsDefaultUserWithGUI } from '../../helpers/users/logInAsDefaultUserWithGUI';
 import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
-import { deleteArticle } from '../../helpers/articles/deleteArticle';
+import { deleteArticleIfExists } from '../../helpers/articles/deleteArticleIfExists';
 
 test.describe('Test articles with user logged in to GAD', () => {
   const email = `test-${UUID4()}@example.com`;
@@ -26,7 +26,7 @@ test.describe('Test articles with user logged in to GAD', () => {
     await deleteUserIfExists(request, email);
   });
 
-  test('create article with user logged in', { tag: '@happyPath' }, async ({ page, request }) => {
+  test('create article with user logged in', { tag: ['@happyPath', '@flaky'], annotation: { type: 'info', description: 'flaky when run with 2 workers, because of beforeAll restoreDB race condition' } }, async ({ page, request }) => {
     await page.locator('#add-new').click();
     await page.getByTestId('title-input').fill('testTitle');
     await page.getByTestId('body-text').fill('testBody');
@@ -45,7 +45,7 @@ test.describe('Test articles with user logged in to GAD', () => {
     const alertText = await page.getByTestId('alert-popup').innerText();
     expect(alertText).toBe('Article was created');
 
-    await deleteArticle(request, articleId);
+    await deleteArticleIfExists(request, articleId, email, 'testPassword');
   });
 
   // test('edit article with user logged in', { tag: '@happyPath' }, async ({ page }) => {});

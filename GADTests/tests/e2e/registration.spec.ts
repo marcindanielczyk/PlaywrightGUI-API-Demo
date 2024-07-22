@@ -83,8 +83,8 @@ test.describe('User registration to GAD', () => {
   test(
     'user should not register without email',
     {
-      tag: '@unhappyPath',
-      annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
+      tag: ['@unhappyPath', '@flaky'],
+      annotation: { type: 'info', description: 'flaky when run with 2 workers, because of beforeAll restoreDB race condition' },
     },
     async ({ page }) => {
       const emailValidatorInfoId = page.locator('#octavalidate_email');
