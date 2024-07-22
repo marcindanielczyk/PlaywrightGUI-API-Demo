@@ -1,6 +1,7 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { createUser, deleteUser } from '../../pages/login.page';
+import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
+import { createDefaultUser } from '../../helpers/users/createDefaultUser';
 
 test.describe('User registration to GAD', () => {
   const firstNameId = 'testName';
@@ -33,7 +34,7 @@ test.describe('User registration to GAD', () => {
     },
     async ({ page, request }) => {
       const email = `test-${UUID4()}@example.com`;
-      await deleteUser(request, email);
+      await deleteUserIfExists(request, email);
       const loginUrl = 'http://localhost:3000/login/';
 
       await page.getByTestId('firstname-input').fill(firstNameId);
@@ -48,7 +49,7 @@ test.describe('User registration to GAD', () => {
       await page.waitForURL(loginUrl);
       expect(page.url()).toBe(loginUrl);
 
-      await deleteUser(request, email);
+      await deleteUserIfExists(request, email);
     },
   );
 
@@ -60,7 +61,7 @@ test.describe('User registration to GAD', () => {
     },
     async ({ page, request }) => {
       const email = `test-${UUID4()}@example.com`;
-      await createUser(request, email);
+      await createDefaultUser(request, email);
 
       const alertPopupId = page.getByTestId('alert-popup');
 
@@ -75,15 +76,15 @@ test.describe('User registration to GAD', () => {
 
       await expect(alertPopupId).toHaveText('User not created! Email not unique');
 
-      await deleteUser(request, email);
+      await deleteUserIfExists(request, email);
     },
   );
 
   test(
     'user should not register without email',
     {
-      tag: '@unhappyPath',
-      annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
+      tag: ['@unhappyPath', '@flaky'],
+      annotation: { type: 'info', description: 'flaky when run with 2 workers, because of beforeAll restoreDB race condition' },
     },
     async ({ page }) => {
       const emailValidatorInfoId = page.locator('#octavalidate_email');
