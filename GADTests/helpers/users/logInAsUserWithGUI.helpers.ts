@@ -1,7 +1,7 @@
 import { expect } from 'playwright/test';
-import { createDefaultUser } from './createDefaultUser';
+import { createUser } from './createUser.helpers.ts';
 
-export async function logInAsDefaultUserWithGUI(page, request, email) {
+export async function logInAsUserWithGUI(page, request, email) {
   const loginUrl = 'http://localhost:3000/login/';
 
   await page.goto('/');
@@ -10,7 +10,7 @@ export async function logInAsDefaultUserWithGUI(page, request, email) {
 
   expect(page.url()).toBe(loginUrl);
 
-  await createDefaultUser(request, email);
+  await createUser(request, email);
 
   const welcomeUrl = 'http://localhost:3000/welcome';
 
