@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
-import { createDefaultUser } from '../../helpers/users/createDefaultUser';
+import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists.helpers';
+import { createUser } from '../../helpers/users/createUser.helpers';
 
 test.describe('User registration to GAD', () => {
   const firstNameId = 'testName';
@@ -61,7 +61,7 @@ test.describe('User registration to GAD', () => {
     },
     async ({ page, request }) => {
       const email = `test-${UUID4()}@example.com`;
-      await createDefaultUser(request, email);
+      await createUser(request, email);
 
       const alertPopupId = page.getByTestId('alert-popup');
 

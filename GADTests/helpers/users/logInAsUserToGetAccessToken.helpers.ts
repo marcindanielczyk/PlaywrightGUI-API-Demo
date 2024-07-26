@@ -1,9 +1,9 @@
 import { v4 as UUID4 } from 'uuid';
-import { createDefaultUser } from './createDefaultUser';
+import { createUser } from './createUser.helpers.ts';
 
 export async function logInAsDefaultUserToGetAccessToken(request) {
   const email = `test-${UUID4()}@example.com`;
-  await createDefaultUser(request, email);
+  await createUser(request, email);
 
   const getUserByEmail = await request.get(`api/users?email=${email}`);
   const body = await getUserByEmail.json();

@@ -1,7 +1,7 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { createDefaultUser } from '../../helpers/users/createDefaultUser';
-import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
+import { createUser } from '../../helpers/users/createUser.helpers';
+import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists.helpers';
 
 test.describe('User login to GAD', () => {
   test.beforeAll(async ({ request }) => {
@@ -21,7 +21,7 @@ test.describe('User login to GAD', () => {
 
   test('user should log in with valid credentials', { tag: '@happyPath' }, async ({ page, request }) => {
     const email = `test-${UUID4()}@example.com`;
-    await createDefaultUser(request, email);
+    await createUser(request, email);
 
     const welcomeUrl = 'http://localhost:3000/welcome';
 
@@ -49,7 +49,7 @@ test.describe('User login to GAD', () => {
 
   test('user should not log in without email provided', { tag: '@unhappyPath' }, async ({ page, request }) => {
     const email = `test-${UUID4()}@example.com`;
-    await createDefaultUser(request, email);
+    await createUser(request, email);
 
     await page.locator('#password').fill('testPassword');
     await page.locator('#loginButton').click();
@@ -62,7 +62,7 @@ test.describe('User login to GAD', () => {
 
   test('user should not log in without password provided', { tag: '@unhappyPath' }, async ({ page, request }) => {
     const email = `test-${UUID4()}@example.com`;
-    await createDefaultUser(request, email);
+    await createUser(request, email);
 
     await page.locator('input#username').fill(email);
     await page.locator('#loginButton').click();
