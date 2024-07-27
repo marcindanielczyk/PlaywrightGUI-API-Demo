@@ -8,8 +8,8 @@ test.describe('Articles CRUD operations with authenticated user', () => {
   const testUserEmail = `test-${UUID4()}@example.com`;
 
   test.beforeAll(async ({ request }) => {
-    const dbRestoreResponse = await request.get('/api/restoreDB');
-    expect(dbRestoreResponse.ok()).toBeTruthy();
+    const restoreDB = await request.get('/api/restoreDB');
+    expect(restoreDB.ok()).toBeTruthy();
   });
 
   test.beforeEach(async ({ page, request }) => {
@@ -84,7 +84,7 @@ test.describe('Articles CRUD operations with authenticated user', () => {
     await deleteArticleIfExists(request, articleId, testUserEmail, 'testPassword');
   });
 
-  test('delete article with authenticated user', { tag: '@happyPath' }, async ({ page, request }) => {
+  test('delete article with authenticated user', { tag: ['@happyPath', '@flaky'], annotation: { type: 'info', description: 'flaky when run with 2 workers, because of beforeAll restoreDB race condition' } }, async ({ page, request }) => {
     await page.locator('#add-new').click();
     await page.getByTestId('title-input').fill('testTitle');
     await page.getByTestId('body-text').fill('testBody');
