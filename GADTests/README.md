@@ -28,8 +28,9 @@ File: [registration.spec.ts](tests/e2e/registration.spec.ts)
 
 File: [articles.spec.ts](tests/e2e/articles.spec.ts)
 
-- create article with user logged in
-- update article with user logged in
+- create article with authenticated user
+- update article with authenticated user
+- delete article with authenticated user
 
 ## Helper Functions
 
