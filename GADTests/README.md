@@ -8,21 +8,21 @@ This project contains automated tests for the GUI and API Demo (GAD) web applica
 
 File: [login.spec.ts](tests/e2e/login.spec.ts)
 
-- User should log in with valid credentials
-- User should not log in if they do not exist
-- User should not log in without email provided
-- User should not log in without password provided
+- user should log in with valid credentials
+- user should not log in if they do not exist
+- user should not log in without email provided
+- user should not log in without password provided
 
 ### 2. User Registration
 
 File: [registration.spec.ts](tests/e2e/registration.spec.ts)
 
-- User should register with valid credentials
-- User should not register with email not unique
-- User should not register without email
-- User should not register without first name
-- User should not register without last name
-- User should not register without password
+- user should register with valid credentials
+- user should not register with email not unique
+- user should not register without email
+- user should not register without first name
+- user should not register without last name
+- user should not register without password
 
 ### 3. Articles Management
 
@@ -34,10 +34,11 @@ File: [articles.spec.ts](tests/e2e/articles.spec.ts)
 
 ## Helper Functions
 
-- [createDefaultUser.ts](helpers/users/createDefaultUser.ts): Creates a default user
-- [deleteUserIfExists.ts](helpers/users/deleteUserIfExists.ts): Deletes a user if they exist
-- [logInAsDefaultUserWithGUI.ts](helpers/users/logInAsDefaultUserWithGUI.ts): Logs in as a default user using the GUI
-- [logInAsDefaultUserToGetAccessToken.ts](helpers/users/logInAsDefaultUserToGetAccessToken.ts): Logs in as a default user to obtain an access token
+- [deleteArticleIfExists.helpers.ts](helpers/articles/deleteArticleIfExists.helpers.ts): deletes an article if it exists
+- [createUser.helpers.ts](helpers/users/createUser.helpers.ts): creates a user
+- [deleteUserIfExists.helpers.ts](helpers/users/deleteUserIfExists.helpers.ts): deletes a user if they exist
+- [logInAsUserWithGUI.helpers.ts](helpers/users/logInAsUserWithGUI.helpers.ts): logs in as a user using the GUI
+- [logInAsUserToGetAccessToken.helpers.ts](helpers/users/logInAsUserToGetAccessToken.helpers.ts): logs in as a user to obtain an access token
 
 ## Configuration
 
