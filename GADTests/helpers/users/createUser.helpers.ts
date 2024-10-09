@@ -1,6 +1,6 @@
 import { expect } from 'playwright/test';
 
-export async function createDefaultUser(request, email) {
+export async function createUser(request, email) {
   const createNewUser = await request.post('api/users', {
     data: {
       firstname: 'testName',

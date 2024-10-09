@@ -1,14 +1,13 @@
 import { test, expect } from 'playwright/test';
 import { v4 as UUID4 } from 'uuid';
-import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists';
-import { createDefaultUser } from '../../helpers/users/createDefaultUser';
+import { deleteUserIfExists } from '../../helpers/users/deleteUserIfExists.helpers';
+import { createUser } from '../../helpers/users/createUser.helpers';
 
-test.describe('User registration to GAD', () => {
-  const firstNameId = 'testName';
-  const lastNameId = 'testLastName';
-  const emailId = 'testEmail@testmail.com';
-  const birthDateId = '2000-01-01';
-  const passwordId = 'testPassword';
+test.describe('User registration in GAD', () => {
+  const testFirstName = 'TestFirstName';
+  const testLastName = 'TestLastName';
+  const testBirthDate = '2000-01-01';
+  const testPassword = 'testPassword';
 
   test.beforeAll(async ({ request }) => {
     const restoreDB = await request.get('/api/restoreDB');
@@ -33,23 +32,23 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page, request }) => {
-      const email = `test-${UUID4()}@example.com`;
-      await deleteUserIfExists(request, email);
+      const testUserEmail = `test-${UUID4()}@example.com`;
+      await deleteUserIfExists(request, testUserEmail);
       const loginUrl = 'http://localhost:3000/login/';
 
-      await page.getByTestId('firstname-input').fill(firstNameId);
-      await page.getByTestId('lastname-input').fill(lastNameId);
-      await page.getByTestId('email-input').fill(email);
-      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.getByTestId('firstname-input').fill(testFirstName);
+      await page.getByTestId('lastname-input').fill(testLastName);
+      await page.getByTestId('email-input').fill(testUserEmail);
+      await page.getByTestId('birthdate-input').fill(testBirthDate);
       await page.click('body');
-      await page.getByTestId('password-input').fill(passwordId);
+      await page.getByTestId('password-input').fill(testPassword);
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
       await page.waitForURL(loginUrl);
       expect(page.url()).toBe(loginUrl);
 
-      await deleteUserIfExists(request, email);
+      await deleteUserIfExists(request, testUserEmail);
     },
   );
 
@@ -60,23 +59,23 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page, request }) => {
-      const email = `test-${UUID4()}@example.com`;
-      await createDefaultUser(request, email);
+      const testUserEmail = `test-${UUID4()}@example.com`;
+      await createUser(request, testUserEmail);
 
-      const alertPopupId = page.getByTestId('alert-popup');
+      const alertPopup = page.getByTestId('alert-popup');
 
-      await page.getByTestId('firstname-input').fill(firstNameId);
-      await page.getByTestId('lastname-input').fill(lastNameId);
-      await page.getByTestId('email-input').fill(email);
-      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.getByTestId('firstname-input').fill(testFirstName);
+      await page.getByTestId('lastname-input').fill(testLastName);
+      await page.getByTestId('email-input').fill(testUserEmail);
+      await page.getByTestId('birthdate-input').fill(testBirthDate);
       await page.click('body');
-      await page.getByTestId('password-input').fill(passwordId);
+      await page.getByTestId('password-input').fill(testPassword);
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      await expect(alertPopupId).toHaveText('User not created! Email not unique');
+      await expect(alertPopup).toHaveText('User not created! Email not unique');
 
-      await deleteUserIfExists(request, email);
+      await deleteUserIfExists(request, testUserEmail);
     },
   );
 
@@ -87,17 +86,17 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'info', description: 'flaky when run with 2 workers, because of beforeAll restoreDB race condition' },
     },
     async ({ page }) => {
-      const emailValidatorInfoId = page.locator('#octavalidate_email');
+      const emailValidatorInfo = page.locator('#octavalidate_email');
 
-      await page.getByTestId('firstname-input').fill(firstNameId);
-      await page.getByTestId('lastname-input').fill(lastNameId);
-      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.getByTestId('firstname-input').fill(testFirstName);
+      await page.getByTestId('lastname-input').fill(testLastName);
+      await page.getByTestId('birthdate-input').fill(testBirthDate);
       await page.click('body');
-      await page.getByTestId('password-input').fill(passwordId);
+      await page.getByTestId('password-input').fill(testPassword);
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      await expect(emailValidatorInfoId).toHaveText('This field is required');
+      await expect(emailValidatorInfo).toHaveText('This field is required');
     },
   );
 
@@ -108,17 +107,18 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const firstNameValidatorInfoId = page.locator('#octavalidate_firstname');
+      const firstNameValidatorInfo = page.locator('#octavalidate_firstname');
+      const testUserEmail = `test-${UUID4()}@example.com`;
 
-      await page.getByTestId('lastname-input').fill(lastNameId);
-      await page.getByTestId('email-input').fill(emailId);
-      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.getByTestId('lastname-input').fill(testLastName);
+      await page.getByTestId('email-input').fill(testUserEmail);
+      await page.getByTestId('birthdate-input').fill(testBirthDate);
       await page.click('body');
-      await page.getByTestId('password-input').fill(passwordId);
+      await page.getByTestId('password-input').fill(testPassword);
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      await expect(firstNameValidatorInfoId).toHaveText('This field is required');
+      await expect(firstNameValidatorInfo).toHaveText('This field is required');
     },
   );
 
@@ -129,17 +129,18 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const lastNameValidatorInfoId = page.locator('#octavalidate_lastname');
+      const lastNameValidatorInfo = page.locator('#octavalidate_lastname');
+      const testUserEmail = `test-${UUID4()}@example.com`;
 
-      await page.getByTestId('firstname-input').fill(firstNameId);
-      await page.getByTestId('email-input').fill(emailId);
-      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.getByTestId('firstname-input').fill(testFirstName);
+      await page.getByTestId('email-input').fill(testUserEmail);
+      await page.getByTestId('birthdate-input').fill(testBirthDate);
       await page.click('body');
-      await page.getByTestId('password-input').fill(passwordId);
+      await page.getByTestId('password-input').fill(testPassword);
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      expect(lastNameValidatorInfoId).toHaveText('This field is required');
+      expect(lastNameValidatorInfo).toHaveText('This field is required');
     },
   );
 
@@ -150,17 +151,18 @@ test.describe('User registration to GAD', () => {
       annotation: { type: 'link', description: 'info about tested application -> https://jaktestowac.pl/about-gad/#Main_features' },
     },
     async ({ page }) => {
-      const passwordValidatorInfoId = page.locator('#octavalidate_password');
+      const passwordValidatorInfo = page.locator('#octavalidate_password');
+      const testUserEmail = `test-${UUID4()}@example.com`;
 
-      await page.getByTestId('firstname-input').fill(firstNameId);
-      await page.getByTestId('lastname-input').fill(lastNameId);
-      await page.getByTestId('email-input').fill(emailId);
-      await page.getByTestId('birthdate-input').fill(birthDateId);
+      await page.getByTestId('firstname-input').fill(testFirstName);
+      await page.getByTestId('lastname-input').fill(testLastName);
+      await page.getByTestId('email-input').fill(testUserEmail);
+      await page.getByTestId('birthdate-input').fill(testBirthDate);
       await page.click('body');
       await page.locator('select#avatar').selectOption({ index: 1 });
       await page.locator('#registerButton').click();
 
-      expect(passwordValidatorInfoId).toHaveText('This field is required');
+      expect(passwordValidatorInfo).toHaveText('This field is required');
     },
   );
 });

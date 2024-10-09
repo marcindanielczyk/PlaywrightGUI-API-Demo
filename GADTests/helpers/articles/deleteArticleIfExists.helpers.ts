@@ -1,6 +1,4 @@
 import { expect } from 'playwright/test';
-import { v4 as UUID4 } from 'uuid';
-import { logInAsDefaultUserToGetAccessToken } from '../users/loginAsDefaultUserToGetAccessToken';
 
 export async function deleteArticleIfExists(request, id, email, password) {
   const getArticleById = await request.get(`api/articles/${id}`);
