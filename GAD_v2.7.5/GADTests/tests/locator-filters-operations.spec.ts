@@ -69,25 +69,16 @@ test.describe('Locator filters', () => {
       const resultsTestId = 'dti-results';
 
       const resultsLocator = page.getByTestId(resultsTestId);
-      const buttonLocator = page.getByRole(parentRole).filter({ has: page.getByText(innerRowText) }).getByRole(elementRole);
+      const buttonLocator = page
+        .getByRole(parentRole)
+        .filter({ has: page.getByText(innerRowText) })
+        .getByRole(elementRole);
 
       // Act:
       await buttonLocator.click();
 
       // Assert:
       await expect(resultsLocator).toHaveText(expectedMessage);
-    });
-
-    test('Single button click (using filter and hasText)', async ({ page }) => {
-      // Arrange:
-      // Act:
-      // Assert:
-    });
-
-    test('Single button click (using filter by child)', async ({ page }) => {
-      // Arrange:
-      // Act:
-      // Assert:
     });
   });
 });
